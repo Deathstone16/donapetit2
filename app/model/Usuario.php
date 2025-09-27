@@ -1,52 +1,66 @@
 <?php
-require_once __DIR__ . '/../../config/bdconexion.php';
+require_once "Model.php";
 
-class Usuario {
-    private $conn;
-    private $table_name = "usuarios";
+class Usuario extends Model {
+    // Nombre de la tabla
+    protected string $table = "usuarios";
+    // Clave primaria
+    protected string $pk    = "id_usuario";
 
-    public $id;
-    public $nombre;
-    public $email;
-    public $password;
+    // Crear un usuario
+    public function crear($nombre, $email, $password, $rol, $telefono, $lat, $lng, $activo) {
+        // Encriptamos la contraseña antes de guardar
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection();
+        return $this->insert([
+            'Nombre'      => $nombre,
+            'Email'       => $email,
+            'Contraseña'  => $passwordHash,
+            'rol'         => $rol,
+            'telefono'    => $telefono,
+            'Latitud'     => $lat,
+            'Longitud'    => $lng,
+            'activo'      => $activo
+        ]);
     }
 
-    public function crear() {
-        $query = "INSERT INTO " . $this->table_name . " (nombre, email, password) VALUES (:nombre, :email, :password)";
-        $stmt = $this->conn->prepare($query);
+    // Actualizar usuario
+    public function actualizarUsuario($id, $nombre, $email, $rol, $telefono, $lat, $lng, $activo, $password = null) {
+        $data = [
+            'Nombre'      => $nombre,
+            'Email'       => $email,
+            'rol'         => $rol,
+            'telefono'    => $telefono,
+            'Latitud'     => $lat,
+            'Longitud'    => $lng,
+            'activo'      => $activo
+        ];
 
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+        // Solo actualiza la contraseña si viene una nueva
+        if ($password !== null) {
+            $data['Contraseña'] = password_hash($password, PASSWORD_BCRYPT);
+        }  //Hacerlo con funcionalidad de recuperar contraseña.
 
-        $stmt->bindParam(":nombre", $this->nombre);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":password", $this->password);
-
-        return $stmt->execute();
+        return $this->update($id, $data);
     }
 
-
-    public function obtenerTodos() {
-        $query = "SELECT * FROM " . $this->table_name;
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Buscar por ID
+    public function encontrarPorId($id): array|null {
+        return $this->find($id);
     }
 
+    // Buscar por Email (para login)
+    public function findByEmail(string $email): array|null {
+        $stmt = self::$db->prepare(
+            "SELECT * FROM {$this->table} WHERE Email = ? LIMIT 1"
+        );
+        $stmt->execute([$email]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
 
-    public function obtenerPorId($id) {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    // Eliminar usuario
+    public function eliminarUsuario($id): bool {
+        return $this->delete($id);
     }
 }
-
