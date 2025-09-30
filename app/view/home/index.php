@@ -1,65 +1,38 @@
 <?php
-$user = htmlspecialchars($data['userName'] ?? 'Usuario', ENT_QUOTES, 'UTF-8');
-require __DIR__ . '/../layouts/header.php';
+$user = htmlspecialchars($userName ?? 'Usuario', ENT_QUOTES, 'UTF-8');
 ?>
-
-<section class="mt-6 md:mt-10 text-center">
-  <h1 class="text-2xl md:text-4xl font-extrabold">
-    Bienvenido <span class="italic"><?php echo $user; ?></span>
+<section class="py-10 text-center">
+  <h1 class="text-3xl font-extrabold text-slate-900">
+    Bienvenido <span class="italic text-brand/90"><?php echo $user; ?></span>
   </h1>
+  <p class="mt-3 text-slate-600">Gestioná tus donaciones y hacé seguimiento de los productos disponibles.</p>
 </section>
 
-<section class="mt-8 md:mt-10">
-  <div class="relative mx-auto max-w-4xl">
-    <div class="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 w-16 h-40 bg-brand/70 rounded-r-2xl rotate-180"></div>
-    <div class="hidden md:block absolute -left-10 top-1/2 -translate-y-1/2 w-28 h-48 bg-brand/80 rounded-2xl -skew-x-6"></div>
+<section class="mx-auto grid max-w-4xl gap-6 py-8 md:grid-cols-3">
+  <article class="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Cargar producto</h2>
+    <p class="mt-2 text-sm text-slate-600">Agregá nuevas donaciones indicando stock, vencimiento y comentarios.</p>
+    <a href="index.php?controller=Producto&action=create"
+       class="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white hover:bg-brand/90">
+      Ir al formulario
+    </a>
+  </article>
 
-    <div class="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 w-16 h-40 bg-brand/70 rounded-l-2xl"></div>
-    <div class="hidden md:block absolute -right-10 top-1/2 -translate-y-1/2 w-28 h-48 bg-brand/80 rounded-2xl skew-x-6"></div>
+  <article class="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Mis productos</h2>
+    <p class="mt-2 text-sm text-slate-600">Consultá el estado, actualizá datos y reservá donaciones.</p>
+    <a href="index.php?controller=Producto&action=index"
+       class="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white hover:bg-brand/90">
+      Ver listado
+    </a>
+  </article>
 
-    <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-soft bg-white">
-      <ul id="slider" class="flex">
-        <li class="min-w-full aspect-[16/9] grid place-items-center bg-brand/60 text-white text-xl">
-          <span class="opacity-90">Slide 1</span>
-        </li>
-        <li class="min-w-full aspect-[16/9] grid place-items-center bg-brand/50 text-white text-xl">
-          <span class="opacity-90">Slide 2</span>
-        </li>
-        <li class="min-w-full aspect-[16/9] grid place-items-center bg-brand/40 text-white text-xl">
-          <span class="opacity-90">Slide 3</span>
-        </li>
-      </ul>
-    </div>
-
-    <button id="prev" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-soft hover:scale-105" aria-label="Anterior">&lt;</button>
-    <button id="next" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-soft hover:scale-105" aria-label="Siguiente">&gt;</button>
-  </div>
+  <article class="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Dashboard</h2>
+    <p class="mt-2 text-sm text-slate-600">Accedé a métricas rápidas sobre productos disponibles y entregados.</p>
+    <a href="#"
+       class="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white hover:bg-brand/90">
+      Próximamente
+    </a>
+  </article>
 </section>
-
-<section class="mt-10 md:mt-12 mx-auto max-w-3xl space-y-6">
-  <a href="#" data-action="cargar" class="group flex items-center justify-between gap-4 px-6 py-4 rounded-full bg-brand text-white hover:brightness-110 shadow-soft">
-    <span class="mx-auto text-center">
-      <div class="font-semibold">Cargar producto</div>
-      <div class="opacity-90 text-sm">Agregar donacion</div>
-    </span>
-    <span class="text-2xl font-bold group-hover:rotate-90">+</span>
-  </a>
-
-  <a href="#" data-action="mis-productos" class="group flex items-center justify-between gap-4 px-6 py-4 rounded-full bg-brand text-white hover:brightness-110 shadow-soft">
-    <span class="mx-auto text-center">
-      <div class="font-semibold">Mis productos</div>
-      <div class="opacity-90 text-sm">Ver o editar donaciones</div>
-    </span>
-    <span class="text-xl">&rsaquo;</span>
-  </a>
-
-  <a href="#" data-action="estadisticas" class="group flex items-center justify-between gap-4 px-6 py-4 rounded-full bg-brand text-white hover:brightness-110 shadow-soft">
-    <span class="mx-auto text-center">
-      <div class="font-semibold">Estadisticas</div>
-      <div class="opacity-90 text-sm">Ver metricas</div>
-    </span>
-    <span class="text-xl">&rsaquo;</span>
-  </a>
-</section>
-
-<?php require __DIR__ . '/../layouts/footer.php'; ?>

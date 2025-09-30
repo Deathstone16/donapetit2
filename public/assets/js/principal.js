@@ -1,29 +1,63 @@
-// Menu lateral
-const openBtn = document.getElementById('openSidebar');
-const closeBtn = document.getElementById('closeSidebar');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
+(function () {
+  const mobileToggle = document.getElementById('btnMenu');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const dropdownToggle = document.getElementById('navDropdownToggle');
+  const dropdownMenu = document.getElementById('navDropdownMenu');
 
-function openMenu() {
-  sidebar.classList.remove('translate-x-full');
-  overlay.classList.remove('hidden');
-  requestAnimationFrame(() => overlay.classList.remove('opacity-0'));
-  openBtn.setAttribute('aria-expanded', 'true');
-}
-function closeMenu() {
-  sidebar.classList.add('translate-x-full');
-  overlay.classList.add('opacity-0');
-  openBtn.setAttribute('aria-expanded', 'false');
-  setTimeout(() => overlay.classList.add('hidden'), 300);
-}
+  const closeDropdown = () => {
+    if (dropdownMenu) dropdownMenu.classList.add('hidden');
+    if (dropdownToggle) dropdownToggle.setAttribute('aria-expanded', 'false');
+  };
 
-if (openBtn) openBtn.addEventListener('click', openMenu);
-if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-if (overlay) overlay.addEventListener('click', closeMenu);
-window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+  const closeMobileMenu = () => {
+    if (mobileMenu) mobileMenu.classList.add('hidden');
+    if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+  };
 
-// Anio en el footer
-const yearEl = document.getElementById('year');
-if (yearEl) {
-  yearEl.textContent = new Date().getFullYear();
-}
+  if (dropdownToggle && dropdownMenu) {
+    dropdownToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = !dropdownMenu.classList.contains('hidden');
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        dropdownMenu.classList.remove('hidden');
+        dropdownToggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
+
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        mobileMenu.classList.remove('hidden');
+        mobileToggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    if (dropdownMenu && !dropdownMenu.contains(event.target) && event.target !== dropdownToggle) {
+      closeDropdown();
+    }
+    if (mobileMenu && !mobileMenu.contains(event.target) && event.target !== mobileToggle) {
+      closeMobileMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeDropdown();
+      closeMobileMenu();
+    }
+  });
+
+  const yearEl = document.getElementById('year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
+})();

@@ -8,45 +8,67 @@ require_once __DIR__ . '/model.php';
  */
 class Producto extends Model
 {
-    /** @var string Nombre de la tabla asociada */
     protected string $table = 'productos';
-
-    /** @var string Nombre de la clave primaria */
     protected string $pk = 'id_producto';
 
     /**
-     * Crea un nuevo producto a partir de los datos recibidos.
+     * Crea un nuevo producto con los campos soportados por el esquema actual.
      */
-    public function create(array $data): string
-    {
-        return $this->insert($data);
-    }
-
-    /**
-     * Atajo de dominio para crear un producto con nombre y unidad.
-     */
-    public function crear(string $nombre, string $unidad): string
-    {
-        return $this->create([
+    public function crear(
+        string $nombre,
+        string $unidad,
+        ?int $cantidad = null,
+        ?string $fechaVencimiento = null,
+        ?string $comentarios = null,
+        ?string $estado = null
+    ): string {
+        $payload = [
             'nom_producto' => $nombre,
             'unidad' => $unidad,
-        ]);
+        ];
+
+        if ($cantidad !== null) {
+            $payload['cantidad'] = $cantidad;
+        }
+        if ($fechaVencimiento !== null) {
+            $payload['fecha_vencimiento'] = $fechaVencimiento;
+        }
+        if ($comentarios !== null) {
+            $payload['comentarios'] = $comentarios;
+        }
+        $payload['estado'] = $estado ?? 'DISPONIBLE';
+
+        return $this->insert($payload);
     }
 
     /**
      * Actualiza un producto existente con los valores proporcionados.
      */
-    public function actualizarProducto($id, string $nombre, string $unidad): bool
-    {
-        return $this->update($id, [
+    public function actualizarProducto(
+        $id,
+        string $nombre,
+        string $unidad,
+        ?int $cantidad = null,
+        ?string $fechaVencimiento = null,
+        ?string $comentarios = null,
+        ?string $estado = null
+    ): bool {
+        $payload = [
             'nom_producto' => $nombre,
             'unidad' => $unidad,
-        ]);
+        ];
+
+        $payload['cantidad'] = $cantidad;
+        $payload['fecha_vencimiento'] = $fechaVencimiento;
+        $payload['comentarios'] = $comentarios;
+
+        if ($estado !== null) {
+            $payload['estado'] = $estado;
+        }
+
+        return $this->update($id, $payload);
     }
 
-    /**
-     * Busca productos cuyo nombre coincida parcialmente con el parametro.
-     */
     public function encontrarPorNombre(string $nombre): array
     {
         self::initDb();
@@ -59,25 +81,16 @@ class Producto extends Model
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Devuelve un producto usando su identificador.
-     */
     public function encontrarPorId($id)
     {
         return $this->find($id);
     }
 
-    /**
-     * Elimina un producto por su identificador.
-     */
     public function eliminarPorId($id): bool
     {
         return $this->delete($id);
     }
 
-    /**
-     * Reexpone la lista de productos permitiendo paginacion.
-     */
     public static function all(int $limit = 100, int $offset = 0): array
     {
         return parent::all($limit, $offset);

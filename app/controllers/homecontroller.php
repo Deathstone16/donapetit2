@@ -1,10 +1,13 @@
 <?php
 declare(strict_types=1);
 
-class HomeController
+require_once __DIR__ . '/controller.php';
+
+class HomeController extends Controller
 {
     public function index(): void
     {
-        require __DIR__ . '/../view/home/index.php';
+        $userName = $_SESSION['user']['name'] ?? 'Usuario';
+        $this->render('home.index', compact('userName'));
     }
 }
