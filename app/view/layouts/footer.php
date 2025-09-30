@@ -1,12 +1,11 @@
-<?php // app/views/layouts/footer.php ?>
   </main>
 
   <footer class="mt-16 border-t border-zinc-200">
     <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-zinc-500">
-      © <?= date('Y') ?> DonAppétit
+      &copy; <?php echo date('Y'); ?> DonAppetit
     </div>
   </footer>
 
-  <script defer src="/js/dashboard.js"></script>
+  <script defer src="/donapetit2/public/assets/js/principal.js"></script>
 </body>
 </html>

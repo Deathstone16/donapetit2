@@ -1,23 +1,23 @@
 <?php
-class Database {
-    private $host = "localhost";
-    private $db_name = "donapettit";
-    private $username = "root";
-    private $password = "";
-    public $conn;
+declare(strict_types=1);
 
-    public function getConnection() {
-        $this->conn = null;
-        try {
-            $this->conn = new PDO(
-                "mysql:host=" . $this->host . ";dbname=" . $this->db_name, 
-                $this->username, 
-                $this->password
-            );
-            $this->conn->exec("set names utf8");
-        } catch(PDOException $exception) {
-            echo "Error de conexión: " . $exception->getMessage();
-        }
-        return $this->conn;
-    }
+$host = 'localhost';
+$dbName = 'donapetit';
+$username = 'usuario';
+$password = 'contrasena';
+
+$dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $host, $dbName);
+
+try {
+    return new \PDO(
+        $dsn,
+        $username,
+        $password,
+        [
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        ]
+    );
+} catch (\PDOException $exception) {
+    throw new \RuntimeException('Error de conexion: ' . $exception->getMessage(), 0, $exception);
 }

@@ -1,83 +1,85 @@
 <?php
-require_once "Model.php";
+declare(strict_types=1);
+
+require_once __DIR__ . '/model.php';
 
 /**
- * Modelo Producto para la tabla 'productos'.
- * Proporciona métodos CRUD específicos para la entidad producto.
+ * Modelo Producto para administrar la tabla productos.
  */
-class Producto extends Model {
-    /**
-     * Nombre de la tabla asociada al modelo.
-     * @var string
-     */
-    protected string $table = "productos";
+class Producto extends Model
+{
+    /** @var string Nombre de la tabla asociada */
+    protected string $table = 'productos';
+
+    /** @var string Nombre de la clave primaria */
+    protected string $pk = 'id_producto';
 
     /**
-     * Nombre de la clave primaria de la tabla.
-     * @var string
+     * Crea un nuevo producto a partir de los datos recibidos.
      */
-    protected string $pk    = "id_producto";
+    public function create(array $data): string
+    {
+        return $this->insert($data);
+    }
 
     /**
-     * Inserta un nuevo producto en la base de datos.
-     *
-     * @param string $nombre  Nombre del producto.
-     * @param string $unidad  Unidad de medida del producto.
-     * @return string         ID del nuevo registro insertado.
+     * Atajo de dominio para crear un producto con nombre y unidad.
      */
-    public function crear($nombre, $unidad) {
-        return $this->insert([
+    public function crear(string $nombre, string $unidad): string
+    {
+        return $this->create([
             'nom_producto' => $nombre,
-            'unidad'       => $unidad
+            'unidad' => $unidad,
         ]);
     }
 
     /**
-     * Actualiza los datos de un producto existente.
-     *
-     * @param mixed  $id      ID del producto a actualizar.
-     * @param string $nombre  Nuevo nombre del producto.
-     * @param string $unidad  Nueva unidad de medida.
-     * @return bool           true si la actualización fue exitosa, false en caso contrario.
+     * Actualiza un producto existente con los valores proporcionados.
      */
-    public function actualizarProducto($id, $nombre, $unidad) {
+    public function actualizarProducto($id, string $nombre, string $unidad): bool
+    {
         return $this->update($id, [
             'nom_producto' => $nombre,
-            'unidad'       => $unidad
+            'unidad' => $unidad,
         ]);
     }
 
     /**
-     * Busca productos por nombre (búsqueda parcial).
-     *
-     * @param string $nombre  Nombre (o parte) del producto a buscar.
-     * @return array          Lista de productos encontrados como arrays asociativos.
+     * Busca productos cuyo nombre coincida parcialmente con el parametro.
      */
-    public function encontrarPorNombre(string $nombre): array {
+    public function encontrarPorNombre(string $nombre): array
+    {
+        self::initDb();
+
         $stmt = self::$db->prepare(
-            "SELECT * FROM {$this->table} WHERE nom_producto LIKE ?"
+            'SELECT * FROM ' . $this->table . ' WHERE nom_producto LIKE ?'
         );
-        $stmt->execute(["%" . $nombre . "%"]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute(['%' . $nombre . '%']);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
-     * Elimina un producto por su ID.
-     *
-     * @param mixed $id  ID del producto a eliminar.
-     * @return bool      true si la eliminación fue exitosa, false en caso contrario.
+     * Devuelve un producto usando su identificador.
      */
-    public function eliminarPorId($id) {
+    public function encontrarPorId($id)
+    {
+        return $this->find($id);
+    }
+
+    /**
+     * Elimina un producto por su identificador.
+     */
+    public function eliminarPorId($id): bool
+    {
         return $this->delete($id);
     }
 
     /**
-     * Busca un producto por su ID.
-     *
-     * @param mixed $id  ID del producto a buscar.
-     * @return mixed     Array asociativo con los datos del producto o false si no existe.
+     * Reexpone la lista de productos permitiendo paginacion.
      */
-    public function encontrarPorId($id): mixed {
-        return $this->find($id);
+    public static function all(int $limit = 100, int $offset = 0): array
+    {
+        return parent::all($limit, $offset);
     }
 }
