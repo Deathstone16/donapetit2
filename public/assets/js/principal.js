@@ -1,9 +1,11 @@
 (function () {
+  // Gestiona la interactividad del menu principal sin exponer variables globales.
   const mobileToggle = document.getElementById('btnMenu');
   const mobileMenu = document.getElementById('mobileMenu');
   const dropdownToggle = document.getElementById('navDropdownToggle');
   const dropdownMenu = document.getElementById('navDropdownMenu');
 
+  // Referencias reutilizables para cerrar los menus cuando sea necesario.
   const closeDropdown = () => {
     if (dropdownMenu) dropdownMenu.classList.add('hidden');
     if (dropdownToggle) dropdownToggle.setAttribute('aria-expanded', 'false');
@@ -14,6 +16,7 @@
     if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
   };
 
+  // Alterna el menu desplegable del encabezado manteniendo la accesibilidad.
   if (dropdownToggle && dropdownMenu) {
     dropdownToggle.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -27,6 +30,7 @@
     });
   }
 
+  // Controla la visibilidad del menu movil en pantallas pequenas.
   if (mobileToggle && mobileMenu) {
     mobileToggle.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -40,6 +44,7 @@
     });
   }
 
+  // Cierra menus si el usuario hace clic en el documento fuera de ellos.
   document.addEventListener('click', (event) => {
     if (dropdownMenu && !dropdownMenu.contains(event.target) && event.target !== dropdownToggle) {
       closeDropdown();
@@ -49,6 +54,7 @@
     }
   });
 
+  // Permite cerrar menus mediante la tecla Escape para mejorar la accesibilidad.
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closeDropdown();
@@ -56,6 +62,7 @@
     }
   });
 
+  // Actualiza el contenido con el ano actual en el elemento indicado.
   const yearEl = document.getElementById('year');
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
