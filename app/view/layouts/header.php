@@ -1,17 +1,18 @@
 <?php
-// Obtiene el nombre de usuario desde la variable $userName, o desde la sesión si no está definida
+// Obtiene el nombre de usuario desde la variable $userName, o desde la sesion si no esta definida
 $userName = $userName ?? ($_SESSION['user']['name'] ?? 'Usuario');
 
-// Obtiene el avatar del usuario si está disponible
+// Obtiene el avatar del usuario si esta disponible
 $userAvatar = $userAvatar ?? ($_SESSION['user']['avatar'] ?? null);
 
-// Define los ítems del menú de navegación, usando los valores por defecto si no se pasan desde el controlador
+// Define los items del menu de navegacion, usando los valores por defecto si no se pasan desde el controlador
 $menuItems = $menuItems ?? [
-    ['label' => 'Inicio',      'url' => 'index.php?controller=Home&action=index'],
-    ['label' => 'Productos',   'url' => 'index.php?controller=Producto&action=index'],
+    ['label' => 'Inicio',         'url' => 'index.php?controller=Home&action=index'],
+    ['label' => 'Productos',      'url' => 'index.php?controller=Producto&action=index'],
+    ['label' => 'Catalogo admin', 'url' => 'index.php?controller=Producto&action=catalogo'],
     ['label' => 'Nuevo producto', 'url' => 'index.php?controller=Producto&action=create'],
-    ['label' => 'Solicitudes', 'url' => '#'],
-    ['label' => 'Salir',       'url' => '#'],
+    ['label' => 'Solicitudes',    'url' => '#'],
+    ['label' => 'Salir',          'url' => '#'],
 ];
 
 // Obtiene la inicial del nombre de usuario para mostrar en el avatar si no hay imagen
@@ -40,7 +41,7 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
     </style>
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col">
-    <!-- Encabezado principal con barra de navegación -->
+    <!-- Encabezado principal con barra de navegacion -->
     <header class="w-full bg-brand text-white shadow">
         <nav class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
             <!-- IZQUIERDA: Logo y nombre -->
@@ -51,18 +52,18 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
                 <span class="text-lg font-semibold tracking-tight">DonAppetit</span>
             </a>
 
-            <!-- DERECHA: Menú y usuario -->
+            <!-- DERECHA: Menu y usuario -->
             <div class="flex items-center gap-4">
-                <!-- Menú desplegable para escritorio -->
+                <!-- Menu desplegable para escritorio -->
                 <div class="relative hidden md:block">
                     <button id="navDropdownToggle"
                         class="inline-flex items-center justify-center rounded-lg bg-white/10 p-2 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                        aria-label="Abrir menú desplegable" aria-expanded="false">
+                        aria-label="Abrir menu desplegable" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                 d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
                         </svg>
-                        <span class="sr-only">Abrir menú</span>
+                        <span class="sr-only">Abrir menu</span>
                     </button>
                     <div id="navDropdownMenu"
                         class="absolute right-0 mt-2 w-52 overflow-hidden rounded-lg bg-white text-slate-800 shadow-lg ring-1 ring-black/5 hidden">
@@ -75,10 +76,10 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
                     </div>
                 </div>
 
-                <!-- Botón menú móvil -->
+                <!-- Boton menu movil -->
                 <button id="btnMenu"
                     class="inline-flex items-center justify-center rounded-lg bg-white/10 px-3 py-2 text-sm font-medium hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:hidden"
-                    aria-label="Abrir menu móvil" aria-expanded="false">
+                    aria-label="Abrir menu movil" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
                     </svg>
@@ -103,7 +104,7 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
             </div>
         </nav>
 
-        <!-- Menú móvil (solo visible en pantallas pequeñas) -->
+        <!-- Menu movil (solo visible en pantallas pequenas) -->
         <div id="mobileMenu" class="md:hidden hidden border-t border-white/20 bg-brand/95">
             <?php foreach ($menuItems as $item): ?>
                 <a href="<?php echo htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
@@ -114,5 +115,5 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
         </div>
     </header>
 
-    <!-- Contenedor principal para el contenido de la página -->
+    <!-- Contenedor principal para el contenido de la pagina -->
     <main class="mx-auto w-full max-w-6xl flex-1 px-4">

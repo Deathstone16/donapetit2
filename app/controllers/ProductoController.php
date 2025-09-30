@@ -23,6 +23,21 @@ class ProductoController extends Controller
         $this->render('products.index', compact('productos', 'page'));
     }
 
+    public function catalogo(): void
+    {
+        $filters = [
+            'search' => isset($_GET['search']) ? trim((string)$_GET['search']) : '',
+            'estado' => isset($_GET['estado']) ? trim((string)$_GET['estado']) : '',
+            'order' => isset($_GET['order']) && $_GET['order'] !== '' ? (string)$_GET['order'] : 'recent',
+        ];
+
+        $estadoOpciones = ['Disponible', 'Agotado', 'En revision'];
+
+        $productos = Producto::all(500, 0);
+
+        $this->render('admin.catalogo_de_productos', compact('productos', 'filters', 'estadoOpciones'));
+    }
+
     public function create(): void
     {
         $this->render('products.product_load');
