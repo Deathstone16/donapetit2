@@ -1,10 +1,18 @@
 <?php
 declare(strict_types=1);
 
-$host = 'localhost';
-$dbName = 'donapetit';
-$username = 'usuario';
-$password = 'contrasena';
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$dbName = getenv('DB_NAME') ?: 'donapetit';
+$username = getenv('DB_USER');
+$password = getenv('DB_PASS');
+
+if ($username === false) {
+    $username = 'root';
+}
+
+if ($password === false) {
+    $password = '';
+}
 
 $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $host, $dbName);
 
