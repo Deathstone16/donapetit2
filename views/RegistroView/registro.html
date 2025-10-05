@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DonAppétit - Registro</title>
+  <link rel="stylesheet" href="styleregistro.css">
+  <link rel="icon" type="image/png" href="../Logo/LogoDon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@1,504&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- LOGO -->
+    <div class="logo">
+      <img src="../Logo/LogoDon.png" alt="Logo DonAppétit">
+    </div>
+
+    <!-- TÍTULO -->
+    <h1 class="brand">DonAppétit</h1>
+    <h2 class="subtitle">Registrarse</h2>
+
+    <!-- FORMULARIO -->
+    <form class="register-form">
+      <!-- Usuario -->
+      <input type="text" placeholder="Nombre de usuario" required>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Contraseña" required>
+
+      <!-- Dirección -->
+      <h3 class="section-title">Dirección física</h3>
+      <input type="text" placeholder="Calle y número" required>
+      <input type="text" placeholder="Ciudad" required>
+      <div class="row">
+        <input type="text" placeholder="Provincia" required>
+        <input type="text" placeholder="Código Postal" required>
+      </div>
+
+      <!-- Radio buttons -->
+      <div class="radio-group">
+        <label><input type="radio" name="rol" value="donante" required> Donante</label>
+        <label><input type="radio" name="rol" value="receptor"> Receptor</label>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="btn">Registrarse</button>
+
+      <!-- Texto alternativo -->
+      <p class="alt-login">
+        ¿Ya tienes cuenta? <a href="../InicioSesionView/iniciosesion.html">Iniciar sesión</a>
+      </p>
+    </form>
+  </div>
+</body>
+</html>

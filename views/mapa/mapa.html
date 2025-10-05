@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de donantes</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="icon" type="image/png" href="LogoDon.png">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+  <main>
+    <section class="map-container">
+      <p>Encuentra negocios con productos disponibles cerca de ti</p>
+      <div id="map"></div>
+    </section>
+
+    <section class="radius-section">
+      <h2>Radio de búsqueda</h2>
+      <div class="radius-control">
+        <input type="range" id="radius" min="0.5" max="5" value="2.5" step="0.5" />
+        <span id="radius-value">2.5 km</span>
+        <button>Buscar</button>
+      </div>
+    </section>
+
+    <section class="filters">
+      <h2>Filtros</h2>
+      <div class="filter-options">
+        <label><input type="checkbox" /> Con stock disponible</label>
+        <label><input type="checkbox" /> Abierto ahora</label>
+        <label><input type="checkbox" /> Favoritos</label>
+      </div>
+    </section>
+
+    <section class="business-list">
+      <h2>Negocios cercanos</h2>
+      <ul>
+        <li>
+          <img src="https://i.imgur.com/l6yB3kK.png" alt="Supermercado El Molino">
+          <div>
+            <h3>Supermercado El Molino</h3>
+            <p>820m • 5 productos disponibles</p>
+          </div>
+          <span class="status online"></span>
+        </li>
+
+        <li>
+          <img src="https://i.imgur.com/l6yB3kK.png" alt="Supermercado La Esquina">
+          <div>
+            <h3>Supermercado La Esquina</h3>
+            <p>950m • 10 productos disponibles</p>
+          </div>
+          <span class="status online"></span>
+        </li>
+
+        <li>
+          <img src="https://i.imgur.com/l6yB3kK.png" alt="Supermercado Don Pedro">
+          <div>
+            <h3>Supermercado Don Pedro</h3>
+            <p>1.4km • Sin stock</p>
+          </div>
+          <span class="status offline"></span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

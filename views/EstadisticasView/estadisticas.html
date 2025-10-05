@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración</title>
+
+  <!-- Fuente y estilos -->
+  <link rel="stylesheet" href="panel.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="LogoDon.png">
+
+  <!-- Librería Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <main>
+    <section class="panel">
+      <h1>Panel de Administración</h1>
+
+      <div class="stats-summary">
+        <div class="stat-card">
+          <h3>Total Donaciones</h3>
+          <p class="value">1,248</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Alimentos Salvados</h3>
+          <p class="value">3,520 kg</p>
+        </div>
+      </div>
+
+      <section class="charts">
+        <div class="chart-container">
+          <h3>Productos más frecuentes</h3>
+          <canvas id="productosChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <h3>Frecuencia mensual</h3>
+          <canvas id="frecuenciaChart"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="panel.js"></script>
+</body>
+</html>
