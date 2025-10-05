@@ -4,15 +4,29 @@ declare(strict_types=1);
 require_once __DIR__ . '/../model/Producto.php';
 require_once __DIR__ . '/controller.php';
 
+/**
+ * Controlador responsable de las operaciones CRUD sobre productos.
+ */
 class ProductoController extends Controller
 {
+    /**
+     * Instancia del modelo Producto utilizada para las operaciones de escritura.
+     */
     private Producto $productoModel;
 
+    /**
+     * Prepara el controlador instanciando el modelo necesario.
+     */
     public function __construct()
     {
         $this->productoModel = new Producto();
     }
 
+    /**
+     * Muestra un listado paginado de productos cargados por el usuario.
+     *
+     * @return void
+     */
     public function index(): void
     {
         $page = max(1, (int)($_GET['page'] ?? 1));
@@ -23,6 +37,11 @@ class ProductoController extends Controller
         $this->render('products.index', compact('productos', 'page'));
     }
 
+    /**
+     * Renderiza el catalogo administrativo con filtros y ordenamientos.
+     *
+     * @return void
+     */
     public function catalogo(): void
     {
         $filters = [
@@ -38,11 +57,21 @@ class ProductoController extends Controller
         $this->render('admin.catalogo_de_productos', compact('productos', 'filters', 'estadoOpciones'));
     }
 
+    /**
+     * Presenta el formulario para crear un nuevo producto.
+     *
+     * @return void
+     */
     public function create(): void
     {
         $this->render('products.product_load');
     }
 
+    /**
+     * Procesa la solicitud de creacion de un nuevo producto.
+     *
+     * @return void
+     */
     public function store(): void
     {
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
@@ -102,6 +131,11 @@ class ProductoController extends Controller
         $this->redirect('index.php?controller=Producto&action=index');
     }
 
+    /**
+     * Muestra el detalle de un producto especifico.
+     *
+     * @return void
+     */
     public function show(): void
     {
         $id = $_GET['id'] ?? null;
@@ -118,6 +152,11 @@ class ProductoController extends Controller
         $this->render('products.show', compact('producto'));
     }
 
+    /**
+     * Renderiza el formulario de edicion para un producto existente.
+     *
+     * @return void
+     */
     public function edit(): void
     {
         $id = $_GET['id'] ?? null;
@@ -134,6 +173,11 @@ class ProductoController extends Controller
         $this->render('products.edit', compact('producto'));
     }
 
+    /**
+     * Actualiza un producto existente con los datos enviados por el formulario.
+     *
+     * @return void
+     */
     public function update(): void
     {
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
@@ -200,6 +244,11 @@ class ProductoController extends Controller
         $this->redirect('index.php?controller=Producto&action=index');
     }
 
+    /**
+     * Elimina un producto por su identificador.
+     *
+     * @return void
+     */
     public function destroy(): void
     {
         $id = $_GET['id'] ?? null;
@@ -212,3 +261,4 @@ class ProductoController extends Controller
         $this->redirect('index.php?controller=Producto&action=index');
     }
 }
+
