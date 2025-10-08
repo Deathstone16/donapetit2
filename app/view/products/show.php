@@ -13,6 +13,7 @@ $cantidad = htmlspecialchars((string)($producto['cantidad'] ?? '--'), ENT_QUOTES
 $fechaVencimiento = htmlspecialchars((string)($producto['fecha_vencimiento'] ?? '--'), ENT_QUOTES, 'UTF-8');
 $estado = htmlspecialchars((string)($producto['estado'] ?? ''), ENT_QUOTES, 'UTF-8');
 $comentarios = htmlspecialchars((string)($producto['comentarios'] ?? ''), ENT_QUOTES, 'UTF-8');
+$categoria = htmlspecialchars((string)($producto['categoria'] ?? ''), ENT_QUOTES, 'UTF-8');
 $createdAt = htmlspecialchars((string)($producto['created_at'] ?? ''), ENT_QUOTES, 'UTF-8');
 $updatedAt = htmlspecialchars((string)($producto['updated_at'] ?? ''), ENT_QUOTES, 'UTF-8');
 ?>
@@ -43,6 +44,11 @@ $updatedAt = htmlspecialchars((string)($producto['updated_at'] ?? ''), ENT_QUOTE
       <div>
         <dt class="text-xs uppercase tracking-wide text-slate-500">Unidad</dt>
         <dd class="text-base font-medium text-slate-900"><?php echo $unidad; ?></dd>
+      </div>
+      <!-- Categoria -->
+      <div>
+        <dt class="text-xs uppercase tracking-wide text-slate-500">Categoria</dt>
+        <dd class="text-base font-medium text-slate-900"><?php echo $categoria !== '' ? $categoria : 'Sin categoria'; ?></dd>
       </div>
       <!-- Cantidad disponible -->
       <div>

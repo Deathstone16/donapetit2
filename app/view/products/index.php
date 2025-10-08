@@ -54,6 +54,7 @@ unset($_SESSION['success'], $_SESSION['error']);
             <th scope="col" class="px-4 py-3 text-left">ID</th>
             <th scope="col" class="px-4 py-3 text-left">Nombre</th>
             <th scope="col" class="px-4 py-3 text-left">Unidad</th>
+            <th scope="col" class="px-4 py-3 text-left">Categoria</th>
             <th scope="col" class="px-4 py-3 text-right">Cantidad</th>
             <th scope="col" class="px-4 py-3 text-left">Vencimiento</th>
             <th scope="col" class="px-4 py-3 text-left">Estado</th>
@@ -73,6 +74,9 @@ unset($_SESSION['success'], $_SESSION['error']);
               </td>
               <td class="px-4 py-3">
                 <?php echo htmlspecialchars((string)($producto['unidad'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+              </td>
+              <td class="px-4 py-3">
+                <?php echo htmlspecialchars((string)($producto['categoria'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
               </td>
               <td class="px-4 py-3 text-right">
                 <?php echo htmlspecialchars((string)($producto['cantidad'] ?? '--'), ENT_QUOTES, 'UTF-8'); ?>

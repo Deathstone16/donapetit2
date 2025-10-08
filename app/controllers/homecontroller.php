@@ -1,19 +1,65 @@
 <?php
 declare(strict_types=1);
 
-// Incluye el controlador base para heredar funcionalidad común
 require_once __DIR__ . '/controller.php';
+require_once __DIR__ . '/../model/donacion.php';
 
-// Define el controlador HomeController que maneja la página de inicio
+/**
+ * Controlador responsable de la pagina inicial del panel.
+ */
 class HomeController extends Controller
 {
-    // Acción principal que se ejecuta al acceder a la página de inicio
+    /**
+     * Muestra la vista de bienvenida del sistema.
+     *
+     * @return void
+     */
     public function index(): void
     {
-        // Obtiene el nombre del usuario desde la sesión, o usa 'Usuario' por defecto si no está logueado
         $userName = $_SESSION['user']['name'] ?? 'Usuario';
 
-        // Renderiza la vista 'home.index' y le pasa la variable $userName
         $this->render('home.index', compact('userName'));
+    }
+
+    /**
+     * Muestra la vista de estadisticas con informacion proveniente de la base de datos.
+     *
+     * @return void
+     */
+    public function statics(): void
+    {
+        $userName = $_SESSION['user']['name'] ?? 'Usuario';
+        $stats = $this->buildStatisticsContext();
+
+        $this->render('statics.statics_main', array_merge($stats, compact('userName')));
+    }
+
+    /**
+     * Obtiene los datos necesarios para el tablero de estadisticas.
+     *
+     * @return array<string,mixed>
+     */
+    private function buildStatisticsContext(): array
+    {
+        $donacionModel = new Donacion();
+
+        $totalRegistroDonaciones = $donacionModel->totalRegistros();
+        $totalCantidadDonada = $donacionModel->totalCantidad();
+        $alimentosSalvados = $donacionModel->totalPorEstado('ENTREGADO');
+
+        if ($alimentosSalvados === 0) {
+            $alimentosSalvados = $totalCantidadDonada;
+        }
+
+        $topProductos = $donacionModel->topProductos();
+        $frecuenciaMensual = $donacionModel->frecuenciaMensual();
+
+        return [
+            'totalDonaciones' => $totalRegistroDonaciones,
+            'totalCantidadDonada' => $totalCantidadDonada,
+            'alimentosSalvados' => $alimentosSalvados,
+            'topProductos' => $topProductos,
+            'frecuenciaMensual' => $frecuenciaMensual,
+        ];
     }
 }
