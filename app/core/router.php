@@ -3,7 +3,7 @@
  * Router principal de la aplicacion DonAppetit.
  */
 
-$controller = $_GET['controller'] ?? 'Producto';
+$controller = $_GET['controller'] ?? 'Home';
 $action = $_GET['action'] ?? 'index';
 
 $controllerClass = $controller . 'Controller';
