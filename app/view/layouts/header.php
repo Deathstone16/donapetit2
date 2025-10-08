@@ -5,15 +5,29 @@ $userName = $userName ?? ($_SESSION['user']['name'] ?? 'Usuario');
 // Obtiene el avatar del usuario si esta disponible
 $userAvatar = $userAvatar ?? ($_SESSION['user']['avatar'] ?? null);
 
-// Define los items del menu de navegacion, usando los valores por defecto si no se pasan desde el controlador
-$menuItems = $menuItems ?? [
-    ['label' => 'Inicio',         'url' => 'index.php?controller=Home&action=index'],
-    ['label' => 'Productos',      'url' => 'index.php?controller=Producto&action=index'],
-    ['label' => 'Catalogo admin', 'url' => 'index.php?controller=Producto&action=catalogo'],
-    ['label' => 'Nuevo producto', 'url' => 'index.php?controller=Producto&action=create'],
-    ['label' => 'Solicitudes',    'url' => '#'],
-    ['label' => 'Salir',          'url' => '#'],
-];
+// Define los items del menu agrupados por secciones (usuario/admin/cuenta).
+$menuSections = $menuSections ?? null;
+if ($menuSections === null) {
+    if (isset($menuItems) && is_array($menuItems)) {
+        $menuSections = ['Menu' => $menuItems];
+    } else {
+        $menuSections = [
+            'Usuario' => [
+                ['label' => 'Inicio', 'url' => 'index.php?controller=Home&action=index'],
+                ['label' => 'Mis productos', 'url' => 'index.php?controller=Producto&action=index'],
+                ['label' => 'Registrar disponibilidad', 'url' => 'index.php?controller=Producto&action=create'],
+            ],
+            'Admin' => [
+                ['label' => 'Panel principal', 'url' => 'index.php?controller=Admin&action=principal'],
+                ['label' => 'Catalogo de productos', 'url' => 'index.php?controller=Producto&action=catalogo'],
+                ['label' => 'Estadisticas', 'url' => 'index.php?controller=Home&action=statics'],
+            ],
+            'Cuenta' => [
+                ['label' => 'Cerrar sesion', 'url' => 'index.php?controller=Auth&action=logout'],
+            ],
+        ];
+    }
+}
 
 // Obtiene la inicial del nombre de usuario para mostrar en el avatar si no hay imagen
 $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
@@ -42,8 +56,8 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col">
     <!-- Encabezado principal con barra de navegacion -->
-    <header class="w-full bg-brand text-white shadow">
-        <nav class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <header class="relative z-30 w-full bg-brand text-white shadow">
+        <nav class="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
             <!-- IZQUIERDA: Logo y nombre -->
             <a href="index.php?controller=Home&action=index" class="flex items-center gap-3">
                 <div class="grid h-10 w-10 place-items-center rounded-xl bg-white/20 shadow-soft">
@@ -66,12 +80,21 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
                         <span class="sr-only">Abrir menu</span>
                     </button>
                     <div id="navDropdownMenu"
-                        class="absolute right-0 mt-2 w-52 overflow-hidden rounded-lg bg-white text-slate-800 shadow-lg ring-1 ring-black/5 hidden">
-                        <?php foreach ($menuItems as $item): ?>
-                            <a href="<?php echo htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
-                                class="block px-4 py-2 text-sm hover:bg-slate-100">
-                                <?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?>
-                            </a>
+                        class="absolute right-0 top-full mt-2 w-60 overflow-hidden rounded-lg bg-white text-slate-800 shadow-xl ring-1 ring-black/5 hidden z-50">
+                        <?php $sectionIndex = 0; $sectionCount = count($menuSections); ?>
+                        <?php foreach ($menuSections as $sectionLabel => $items): ?>
+                            <div class="<?php echo $sectionIndex + 1 < $sectionCount ? 'border-b border-slate-100' : ''; ?>">
+                                <p class="px-4 pt-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                    <?php echo htmlspecialchars($sectionLabel, ENT_QUOTES, 'UTF-8'); ?>
+                                </p>
+                                <?php foreach ($items as $item): ?>
+                                    <a href="<?php echo htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                                        class="block px-4 py-2 text-sm hover:bg-slate-100">
+                                        <?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php $sectionIndex++; ?>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -105,12 +128,19 @@ $initial = strtoupper(mb_substr($userName, 0, 1, 'UTF-8'));
         </nav>
 
         <!-- Menu movil (solo visible en pantallas pequenas) -->
-        <div id="mobileMenu" class="md:hidden hidden border-t border-white/20 bg-brand/95">
-            <?php foreach ($menuItems as $item): ?>
-                <a href="<?php echo htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
-                    class="block px-4 py-2 text-sm text-white hover:bg-white/15">
-                    <?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?>
-                </a>
+        <div id="mobileMenu" class="absolute left-0 top-full hidden w-full border-t border-white/20 bg-brand/95 shadow-2xl z-40 md:hidden">
+            <?php foreach ($menuSections as $sectionLabel => $items): ?>
+                <div class="px-4 py-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-white/70">
+                        <?php echo htmlspecialchars($sectionLabel, ENT_QUOTES, 'UTF-8'); ?>
+                    </p>
+                </div>
+                <?php foreach ($items as $item): ?>
+                    <a href="<?php echo htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                        class="block px-4 py-2 text-sm text-white hover:bg-white/15">
+                        <?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?>
+                    </a>
+                <?php endforeach; ?>
             <?php endforeach; ?>
         </div>
     </header>

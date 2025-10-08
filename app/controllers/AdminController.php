@@ -43,6 +43,24 @@ class AdminController extends Controller
     }
 
     /**
+     * Muestra la configuración de notificaciones del panel.
+     *
+     * @return void
+     */
+    public function notificationSettings(): void
+    {
+        $radioMin = 1;
+        $radioMax = 20;
+        $radioActual = 5;
+        $canales = [
+            'push' => true,
+            'email' => true,
+        ];
+
+        $this->render('admin.notification_settings', compact('radioMin', 'radioMax', 'radioActual', 'canales'));
+    }
+
+    /**
      * Normaliza los campos de un producto para facilitar su consumo.
      *
      * @param array<string,mixed> $producto Datos originales del modelo.

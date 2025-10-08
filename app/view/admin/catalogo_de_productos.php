@@ -6,6 +6,9 @@ $searchTerm = (string)($filters['search'] ?? '');
 $estadoFiltro = (string)($filters['estado'] ?? '');
 $orderFiltro = (string)($filters['order'] ?? 'recent');
 $estadoOpciones = $estadoOpciones ?? ['Disponible', 'Agotado', 'En revision'];
+$unidades = $unidades ?? [];
+$nombresDisponibles = $nombresDisponibles ?? [];
+$categorias = $categorias ?? [];
 
 $successMessage = $_SESSION['success'] ?? null;
 $errorMessage = $_SESSION['error'] ?? null;
@@ -37,11 +40,78 @@ $hasProductos = !empty($productos);
       <h1 class="text-2xl font-bold text-slate-900">Catalogo de productos</h1>
       <p class="text-sm text-slate-600">Gestiona y revisa el estado de cada item disponible.</p>
     </div>
-    <a href="index.php?controller=Producto&action=create"
+    <a href="#form-nuevo-producto"
        class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-700">
-      <span>Nuevo producto</span>
+      <span>Agregar al catalogo</span>
     </a>
   </header>
+
+  <section id="form-nuevo-producto" class="mb-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Registrar nuevo producto base</h2>
+        <p class="text-sm text-slate-600">Completa este formulario para que el producto quede disponible en el catalogo y pueda ser seleccionado al registrar stock.</p>
+      </div>
+      <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">Solo administracion</span>
+    </div>
+
+      <form class="mt-4 grid gap-4 sm:grid-cols-4" method="post" action="index.php?controller=Producto&action=storeCatalogItem" autocomplete="off">
+        <div class="sm:col-span-1">
+          <label for="nombre_catalogo" class="text-xs uppercase tracking-wide text-slate-500">Nombre del producto<span class="text-red-600"> *</span></label>
+          <input id="nombre_catalogo" name="nombre_catalogo" type="text" required
+                 class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
+                 placeholder="Ej.: Arroz integral" />
+        </div>
+
+        <div>
+          <label for="unidad_catalogo" class="text-xs uppercase tracking-wide text-slate-500">Unidad sugerida<span class="text-red-600"> *</span></label>
+          <select id="unidad_catalogo" name="unidad_catalogo" required
+                  class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+            <option value="">Seleccionar unidad</option>
+            <?php foreach ($unidades as $unidad): ?>
+              <option value="<?php echo htmlspecialchars($unidad['abreviatura'], ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars($unidad['nombre_unidad'] . ' (' . $unidad['abreviatura'] . ')', ENT_QUOTES, 'UTF-8'); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <div>
+          <label for="categoria_catalogo" class="text-xs uppercase tracking-wide text-slate-500">Categoria<span class="text-red-600"> *</span></label>
+          <select id="categoria_catalogo" name="categoria_catalogo" required
+                  class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+            <option value="">Seleccionar categoria</option>
+            <?php foreach ($categorias as $catId => $catNombre): ?>
+              <option value="<?php echo htmlspecialchars((string)$catId, ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars((string)$catNombre, ENT_QUOTES, 'UTF-8'); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <div class="sm:col-span-1">
+          <label for="comentarios_catalogo" class="text-xs uppercase tracking-wide text-slate-500">Notas</label>
+          <input id="comentarios_catalogo" name="comentarios_catalogo" type="text"
+                 class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
+                 placeholder="Descripcion breve (opcional)" />
+        </div>
+
+        <div class="sm:col-span-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+          <button type="submit"
+                  class="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand/90">
+            Guardar en catalogo
+          </button>
+          <a href="#catalogo-admin-view" class="text-sm text-slate-500 hover:text-brand">Ver listado</a>
+        </div>
+
+        <?php if (empty($unidades)): ?>
+          <p class="sm:col-span-4 text-xs text-amber-600">No hay unidades activas cargadas; agrega unidades para poder registrar nuevos productos.</p>
+        <?php endif; ?>
+        <?php if (empty($categorias)): ?>
+          <p class="sm:col-span-4 text-xs text-amber-600">No hay categorias cargadas. Registra categorias en la base de datos para habilitar esta operacion.</p>
+        <?php endif; ?>
+      </form>
+  </section>
 
   <div class="mb-6 grid gap-3 sm:grid-cols-3">
     <article class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
